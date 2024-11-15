@@ -113,6 +113,54 @@
 		
 		group.children[ 0 ].geometry = new THREE.WireframeGeometry( boxGeometry );
 		group.children[ 1 ].geometry = boxGeometry;
+
+
+		// let ptCout = positions.length / 3;
+		// for (let i = 0; i < ptCout; i++)
+		// {
+		// 	let p = new THREE.Vector3(positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2]);
+		// 	console.log(p);
+		// }
+		// debugger;
+		const vertices = [];
+		const positionAttribute = BufferGeometryUtils
+			.mergeVertices( new THREE.BoxGeometry(1, 1, 1) )
+			.getAttribute( 'position' );
+
+		for ( let i = 0; i < positionAttribute.count; i ++ ) {
+
+			const vertex = new THREE.Vector3();
+			vertex.fromBufferAttribute( positionAttribute, i );
+			vertices.push( vertex );
+		}
+		
+		{
+			const boxGeometry = new THREE.BoxGeometry( 0.1, 0.1, 0.1 );
+			const boxMaterial = new THREE.MeshBasicMaterial();
+
+			for ( const vertex of vertices ) {
+				const handle = new THREE.Mesh( boxGeometry, boxMaterial );
+				handle.position.copy( vertex );
+				scene.add( handle );
+			}
+			// https://github.com/mrdoob/three.js/blob/master/examples/webgl_interactive_cubes_gpu.html
+		}
+
+		// const pointsMaterial = new THREE.PointsMaterial( {
+		// 	color: 0x0080ff,
+		// 	size: 0.1,
+		// 	alphaTest: 0.5
+		// } );
+
+		// const pointsGeometry = new THREE.BufferGeometry()
+		// 	.setFromPoints( vertices );
+
+		// const points = new THREE.Points( pointsGeometry, pointsMaterial );
+		// group.add( points );
+
+		debugger;
+
+
 	
 		scene.add(group);
 
@@ -124,8 +172,8 @@
 			requestAnimationFrame(render);
 			
 
-			group.rotation.x += 0.005;
-			group.rotation.y += 0.005;
+			// group.rotation.x += 0.005;
+			// group.rotation.y += 0.005;
 
 
 			// Render the scene
